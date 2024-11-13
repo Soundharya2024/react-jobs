@@ -8,10 +8,10 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <Hero/>
-      <HomeCards/>
-      <JobListings/>
-      <ViewAllJobs/>
+      <Hero />
+      <HomeCards />
+      <JobListings />
+      <ViewAllJobs />
     </>
   );
 }
