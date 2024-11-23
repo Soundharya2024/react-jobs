@@ -13,7 +13,10 @@ const JobListings = ({ isHome = false }) => {
           "https://soundharya2024.github.io/jobs-json/jobs.json"
         );
         const data = await res.json();
-        setJobs(data.jobs);
+        const filteredJobs = isHome
+          ? data.jobs.filter((job, index) => index < 3)
+          : data.jobs;
+        setJobs(filteredJobs);
       } catch (error) {
         console.log("Error fetching data", error);
       } finally {
