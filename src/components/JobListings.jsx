@@ -8,13 +8,11 @@ const JobListings = ({ isHome = false }) => {
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const apiUrl = isHome
-        ? "../jobs-json/jobs.json?_limit=3"
-        : "../jobs-json/jobs.json";
       try {
-        const res = await fetch(apiUrl);
+        const res = await fetch(
+          "https://soundharya2024.github.io/jobs-json/jobs.json"
+        );
         const data = await res.json();
-        console.log(data);
         setJobs(data.jobs);
       } catch (error) {
         console.log("Error fetching data", error);
