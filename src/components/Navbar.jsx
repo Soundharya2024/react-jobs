@@ -24,7 +24,7 @@ export default function Navbar() {
             </NavLink>
             <div className="md:ml-auto">
               <div className="flex space-x-2">
-                <NavLink to="/react-jobs" className={linkClass}>
+                <NavLink to="/react-jobs" end className={linkClass}>
                   Home
                 </NavLink>
                 <NavLink to="/react-jobs/jobs" className={linkClass}>
