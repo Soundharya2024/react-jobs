@@ -19,13 +19,13 @@ export default function App() {
   //Add New Job
   async function addJob(newJob) {
     const token = prompt(
-      "Please enter the GitHub Personal Access Token for accessing jobs.json",
-      ""
+      "Please enter the GitHub Personal Access Token for accessing jobs.json"
     );
-    if (token !== "") {
+    if (!token) {
+      toast.error("Access denied");
+    } else {
       fetch(url)
         .then((response) => response.json())
-
         .then((data) => {
           const currentSHA = data.sha;
           let jsonObject;
@@ -62,20 +62,22 @@ export default function App() {
               sha: currentSHA,
             }),
           })
-            .then((response) => response.json())
+            .then((response) => {
+              if (response.ok) return response.json();
+              return Promise.reject(response);
+            })
             .then((data) => {
-              console.log("Jobs JSON File updated:", data);
+              console.log("Jobs JSON File updated with new job:", data);
               toast.success("Job added successfully");
             })
-            .catch((error) =>
-              console.log("Error updating Jobs JSON file", error)
-            );
+            .catch((error) => {
+              console.log("Error updating Jobs JSON file with new job", error);
+              toast.error(error.statusText);
+            });
         })
         .catch((error) => console.log("Error reading Jobs JSON file", error));
 
       //checkLatestDeploymentStatus();
-    } else {
-      toast.error("Unauthorized access");
     }
     return;
   }
@@ -83,10 +85,11 @@ export default function App() {
   //Delete Job
   async function deleteJob(id) {
     const token = prompt(
-      "Please enter the GitHub Personal Access Token for accessing jobs.json",
-      ""
+      "Please enter the GitHub Personal Access Token for accessing jobs.json"
     );
-    if (token !== "") {
+    if (!token) {
+      toast.error("Access denied");
+    } else {
       fetch(url)
         .then((response) => response.json())
 
@@ -128,7 +131,10 @@ export default function App() {
                 sha: currentSHA,
               }),
             })
-              .then((response) => response.json())
+              .then((response) => {
+                if (response.ok) return response.json();
+                return Promise.reject(response);
+              })
               .then((data) => {
                 console.log(
                   `Jobs JSON File updated with delete of job with id: ${id}:`,
@@ -136,12 +142,13 @@ export default function App() {
                 );
                 toast.success("Job deleted succesfully");
               })
-              .catch((error) =>
+              .catch((error) => {
                 console.log(
                   `Error updating Jobs JSON file with delete of job with id: ${id}`,
                   error
-                )
-              );
+                );
+                toast.error(error.statusText);
+              });
           } else {
             console.log(`Job with id: ${id} not found in the JSON file`);
           }
@@ -152,8 +159,6 @@ export default function App() {
             error
           )
         );
-    } else {
-      toast.error("Unauthorized access");
     }
     return;
   }
@@ -161,10 +166,11 @@ export default function App() {
   //Update Job
   async function updateJob(updateJob) {
     const token = prompt(
-      "Please enter the GitHub Personal Access Token for accessing jobs.json",
-      ""
+      "Please enter the GitHub Personal Access Token for accessing jobs.json"
     );
-    if (token !== "") {
+    if (!token) {
+      toast.error("Access denied");
+    } else {
       fetch(url)
         .then((response) => response.json())
 
@@ -208,7 +214,10 @@ export default function App() {
               sha: currentSHA,
             }),
           })
-            .then((response) => response.json())
+            .then((response) => {
+              if (response.ok) return response.json();
+              return Promise.reject(response);
+            })
             .then((data) => {
               console.log(
                 `Jobs JSON File updated with edit for job with id: ${updateJob.id}:`,
@@ -216,18 +225,18 @@ export default function App() {
               );
               toast.success("Job edited successfully");
             })
-            .catch((error) =>
+            .catch((error) => {
               console.log(
                 `Error updating Jobs JSON file with edit for job with id: ${updateJob.id}:`,
                 error
-              )
-            );
+              );
+
+              toast.error(error.statusText);
+            });
         })
         .catch((error) => console.log("Error reading Jobs JSON file", error));
 
       //checkLatestDeploymentStatus();
-    } else {
-      toast.error("Unauthorized access");
     }
     return;
   }
