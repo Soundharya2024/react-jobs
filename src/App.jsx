@@ -265,7 +265,7 @@ export default function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<MainLayout />}>
-        <Route path="/react-jobs" element={<HomePage />} />
+        <Route path="/react-jobs/" element={<HomePage />} />
         <Route path="/react-jobs/jobs" element={<JobsPage />} />
         <Route
           path="/react-jobs/add-job"

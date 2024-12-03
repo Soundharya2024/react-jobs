@@ -15,7 +15,7 @@ export default function Navbar() {
             {/* <!-- Logo --> */}
             <NavLink
               className="flex flex-shrink-0 items-center mr-4"
-              to="/react-jobs"
+              to="/react-jobs/"
             >
               <img className="h-10 w-auto" src={logo} alt="React Jobs" />
               <span className="hidden md:block text-white text-2xl font-bold ml-2">
@@ -24,7 +24,7 @@ export default function Navbar() {
             </NavLink>
             <div className="md:ml-auto">
               <div className="flex space-x-2">
-                <NavLink to="/react-jobs" end className={linkClass}>
+                <NavLink to="/react-jobs/" end className={linkClass}>
                   Home
                 </NavLink>
                 <NavLink to="/react-jobs/jobs" className={linkClass}>
