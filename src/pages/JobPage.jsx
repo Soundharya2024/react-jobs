@@ -1,11 +1,13 @@
 //import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useLocation } from "react-router-dom";
 import { FaArrowLeft, FaMapMarker } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
 
 export default function JobPage({ deleteJob, loading }) {
   const job = useLoaderData();
+
+  const { key } = useLocation();
   const navigate = useNavigate();
 
   function onDeleteClick(jobId) {
@@ -15,15 +17,21 @@ export default function JobPage({ deleteJob, loading }) {
 
     if (!confirm) return;
 
+    document
+      .getElementsByClassName("delete-btn")[0]
+      .setAttribute("disabled", "disabled");
+
     deleteJob(jobId);
 
     let intervalId = setInterval(checkLoadingState, 1000);
 
     function checkLoadingState() {
       if (!loading) {
+        console.log("Delete check loading state function, loading: ", loading);
         clearInterval(intervalId);
         navigate("/react-jobs/jobs");
       }
+      console.log("Delete check loading state function, loading: ", loading);
     }
   }
   //   const [job, setJob] = useState(null);
@@ -120,10 +128,16 @@ export default function JobPage({ deleteJob, loading }) {
                 </Link>
                 <button
                   onClick={() => onDeleteClick(job.id)}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 block"
+                  className="delete-btn bg-red-500 disabled:bg-gray-400 enabled:hover:bg-red-600 text-white disabled:text-gray-600 font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline mt-4 flex items-center justify-center"
                 >
+                  <Spinner
+                    loading={loading}
+                    size={20}
+                    display="inline-block"
+                    margin="0 10px 0 0"
+                    color="#4B5563"
+                  />
                   Delete Job
-                  <Spinner loading={loading} size={50} />
                 </button>
               </div>
             </aside>

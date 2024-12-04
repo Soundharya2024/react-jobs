@@ -1,9 +1,16 @@
 import { useState } from "react";
-import { useParams, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useLoaderData,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Spinner from "../components/Spinner";
 
 const EditJobPage = ({ updateJobSubmit, loading }) => {
   const job = useLoaderData();
+  const { key } = useLocation();
+
   const [title, setTitle] = useState(job.title);
   const [type, setType] = useState(job.type);
   const [location, setLocation] = useState(job.location);
@@ -37,15 +44,21 @@ const EditJobPage = ({ updateJobSubmit, loading }) => {
       },
     };
 
+    document
+      .getElementsByClassName("disableForm")[0]
+      .setAttribute("disabled", "disabled");
+
     updateJobSubmit(updatedJob);
 
     let intervalId = setInterval(checkLoadingState, 1000);
 
     function checkLoadingState() {
       if (!loading) {
+        console.log("Edit check loading state function, loading: ", loading);
         clearInterval(intervalId);
         navigate(`/react-jobs/jobs/${id}`);
       }
+      console.log("Edit check loading state function, loading: ", loading);
     }
   }
 
@@ -53,10 +66,8 @@ const EditJobPage = ({ updateJobSubmit, loading }) => {
     <section className="bg-indigo-50">
       <div className="container m-auto max-w-2xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-          {loading ? (
-            <Spinner loading={loading} />
-          ) : (
-            <form onSubmit={submitForm}>
+          <form onSubmit={submitForm}>
+            <fieldset className="disableForm">
               <h2 className="text-3xl text-center font-semibold mb-6">
                 Update Job
               </h2>
@@ -237,14 +248,23 @@ const EditJobPage = ({ updateJobSubmit, loading }) => {
 
               <div>
                 <button
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+                  className="bg-indigo-500 disabled:bg-gray-400 enabled:hover:bg-indigo-600 text-white disabled:text-gray-600 font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  Update Job
+                  {loading ? (
+                    <Spinner
+                      loading={loading}
+                      size={25}
+                      margin="0px auto"
+                      color="#4B5563"
+                    />
+                  ) : (
+                    "Update Job"
+                  )}
                 </button>
               </div>
-            </form>
-          )}
+            </fieldset>
+          </form>
         </div>
       </div>
     </section>

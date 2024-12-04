@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Spinner from "../components/Spinner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AddJobPage({ addJobSubmit, loading }) {
+  const { key } = useLocation();
+
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Full-time");
   const [location, setLocation] = useState("");
@@ -32,14 +34,20 @@ export default function AddJobPage({ addJobSubmit, loading }) {
       },
     };
 
+    document
+      .getElementsByClassName("disableForm")[0]
+      .setAttribute("disabled", "disabled");
+
     addJobSubmit(newJob);
     let intervalId = setInterval(checkLoadingState, 1000);
 
     function checkLoadingState() {
       if (!loading) {
+        console.log("Add check loading state function, loading: ", loading);
         clearInterval(intervalId);
         navigate("/react-jobs/jobs");
       }
+      console.log("Add check loading state function, loading: ", loading);
     }
   }
 
@@ -47,10 +55,8 @@ export default function AddJobPage({ addJobSubmit, loading }) {
     <section className="bg-indigo-50">
       <div className="container m-auto max-w-2xl py-24">
         <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
-          {loading ? (
-            <Spinner loading={loading} />
-          ) : (
-            <form onSubmit={submitForm}>
+          <form onSubmit={submitForm}>
+            <fieldset className="disableForm">
               <h2 className="text-3xl text-center font-semibold mb-6">
                 Add Job
               </h2>
@@ -231,14 +237,23 @@ export default function AddJobPage({ addJobSubmit, loading }) {
 
               <div>
                 <button
-                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
+                  className="bg-indigo-500 disabled:bg-gray-400 enabled:hover:bg-indigo-600 text-white disabled:text-gray-600 font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  Add Job
+                  {loading ? (
+                    <Spinner
+                      loading={loading}
+                      size={25}
+                      margin="0px auto"
+                      color="#4B5563"
+                    />
+                  ) : (
+                    "Add Job"
+                  )}
                 </button>
               </div>
-            </form>
-          )}
+            </fieldset>
+          </form>
         </div>
       </div>
     </section>
